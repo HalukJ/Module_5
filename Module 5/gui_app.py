@@ -83,7 +83,7 @@ class ReliableStarGUI:
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
 
         # Welcome
-        self.chat.append_notice(self.root, "Welcome - \u2713 delivered, X lost/pending")
+        self.chat.append_notice(self.root, "Welcome - ⭐ delivered, ☆ lost/pending")
 
     # Timers
     def _refresh_header_stats(self):
