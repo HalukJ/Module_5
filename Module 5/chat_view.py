@@ -15,8 +15,18 @@ class ChatView:
         self.scroll = ttk.Scrollbar(wrap, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.scroll.set)
         self.inner = tk.Frame(self.canvas, bg="#0b2239")
-        self.canvas.create_window((0, 0), window=self.inner, anchor="nw")
-        self.inner.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+        # Anchor the inner frame to the bottom-right of the canvas
+        self._win = self.canvas.create_window((0, 0), window=self.inner, anchor="se")
+        def _reanchor(_=None):
+            try:
+                w = self.canvas.winfo_width() or 0
+                h = self.canvas.winfo_height() or 0
+                self.canvas.coords(self._win, (w, h))
+                self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+            except Exception:
+                pass
+        self.canvas.bind("<Configure>", _reanchor)
+        self.inner.bind("<Configure>", _reanchor)
         self.canvas.pack(side="left", fill="both", expand=True)
         self.scroll.pack(side="right", fill="y")
 
@@ -27,7 +37,7 @@ class ChatView:
     def append_notice(self, root, text: str):
         row = tk.Frame(self.inner, bg="#0b2239")
         row.pack(fill="x", padx=6, pady=2)
-        tk.Label(row, text=text, fg="#c9dcff", font=("Segoe UI", 9, "italic"), bg="#0b2239", wraplength=640, justify="center").pack(pady=2)
+        tk.Label(row, text=text, fg="#c9dcff", font=("Segoe UI", 9, "italic"), bg="#0b2239", wraplength=640, justify="right").pack(pady=2, anchor="e")
         self.scroll_bottom(root)
 
     def add_message(self, root, text: str, kind: str):
@@ -35,10 +45,10 @@ class ChatView:
         if kind == "sent":
             bg_color = "#157bb8"; fg_color = "#ffffff"; anchor = "e"; tick = DeliveryMarks.PENDING
         else:
-            bg_color = "#ffffff"; fg_color = "#0b2239"; anchor = "w"; tick = ""
+            bg_color = "#ffffff"; fg_color = "#0b2239"; anchor = "e"; tick = ""
         row = tk.Frame(self.inner, bg="#0b2239"); row.pack(fill="x", padx=8, pady=4)
         inner = tk.Frame(row, bg="#0b2239"); inner.pack(anchor=anchor)
-        txt = tk.Label(inner, text=text, bg=bg_color, fg=fg_color, font=("Segoe UI", 11), wraplength=560, justify="left", padx=12, pady=8, bd=0)
+        txt = tk.Label(inner, text=text, bg=bg_color, fg=fg_color, font=("Segoe UI", 11), wraplength=560, justify="right", padx=12, pady=8, bd=0)
         txt.pack(side="top")
         meta = tk.Label(inner, text=DeliveryMarks.stamp(timestamp, tick), bg="#0b2239", fg="#c9dcff", font=("Segoe UI", 8))
         meta.pack(side="top", anchor="e", pady=(2, 0))
@@ -55,11 +65,11 @@ class ChatView:
         if kind == "sent":
             bg_color = "#157bb8"; fg_color = "#ffffff"; anchor = "e"; tick = DeliveryMarks.PENDING
         else:
-            bg_color = "#ffffff"; fg_color = "#0b2239"; anchor = "w"; tick = ""
+            bg_color = "#ffffff"; fg_color = "#0b2239"; anchor = "e"; tick = ""
         row = tk.Frame(self.inner, bg="#0b2239"); row.pack(fill="x", padx=8, pady=4)
         inner = tk.Frame(row, bg="#0b2239"); inner.pack(anchor=anchor)
         top = tk.Frame(inner, bg=bg_color); top.pack(side="top", anchor=anchor)
-        txt = tk.Label(top, text=label, bg=bg_color, fg=fg_color, font=("Segoe UI", 11), padx=12, pady=8)
+        txt = tk.Label(top, text=label, bg=bg_color, fg=fg_color, font=("Segoe UI", 11), padx=12, pady=8, justify="right")
         txt.pack(side="left")
         def _play():
             if winsound and os.path.exists(path):
@@ -88,4 +98,3 @@ class ChatView:
             b["meta"].configure(text=DeliveryMarks.stamp(ts, mark if not detail else f"{mark} {detail}"))
         except Exception:
             pass
-
