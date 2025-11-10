@@ -30,7 +30,7 @@ class ReliableStarGUI:
     def __init__(self, root: tk.Tk, messenger: ReliableMessenger):
         self.root = root
         self.messenger = messenger
-        self.root.title("Reliable Messaging - Messenger GUI")
+        self.root.title("Mudt Messenger App")
         self.root.geometry("980x720")
         self.root.configure(bg="#0b2239")
 
@@ -47,7 +47,6 @@ class ReliableStarGUI:
             messenger=self.messenger,
             on_verify=self._on_verify,
             on_toggle_log=self._toggle_log,
-            on_help=self._open_help,
             on_strategy_select=self._on_strategy_select,
         )
 
@@ -64,7 +63,6 @@ class ReliableStarGUI:
             ("Charts", self._open_charts_panel),
             ("Server Log", self._show_server_log),
             ("Clear Screen", self._on_clear_screen),
-            ("Clear CSV", self._on_clear_csv),
             ("Simulate Loss", self._open_loss_sim),
         ]
         self.sidebar = Sidebar(body, actions)
@@ -138,25 +136,7 @@ class ReliableStarGUI:
     def _toggle_log(self):
         self.log.toggle()
 
-    def _open_help(self):
-        text = (
-            "Data Delivery System\n\n"
-            "- Channel loss: Each attempt has a probability of loss sampled from the configured range.\n"
-            "- Single: Send each chunk once.\n"
-            "- Double: Send each chunk twice (improves delivery at cost of attempts).\n"
-            "- ARQ (Stop-and-Wait): Retry lost chunks up to max_retries.\n\n"
-            "Metrics\n"
-            "- Chunks delivered vs total: overall reliability.\n"
-            "- Attempts lost vs total: observed loss rate.\n"
-            "- Loss range: configured per-send loss sampling bounds.\n"
-        )
-        win = tk.Toplevel(self.root)
-        win.title("Help - Delivery System")
-        txt = tk.Text(win, wrap="word", width=80, height=18)
-        txt.pack(fill="both", expand=True)
-        txt.insert("end", text)
-        txt.configure(state="disabled")
-        ttk.Button(win, text="Close", command=win.destroy).pack(pady=6)
+    
 
     # Actions/events
     def _on_send(self):
@@ -219,8 +199,7 @@ class ReliableStarGUI:
             return
         self._on_strategy_select(choice)
 
-    def _on_clear_csv(self):
-        self.messenger.clear_csv()
+    
 
     def _on_clear_screen(self):
         for child in list(self.chat.inner.children.values()):

@@ -3,11 +3,11 @@ from tkinter import ttk
 
 
 class HeaderBar:
-    def __init__(self, parent, messenger, on_verify, on_toggle_log, on_help, on_strategy_select):
+    def __init__(self, parent, messenger, on_verify, on_toggle_log, on_strategy_select):
         self.frame = tk.Frame(parent, bg="#08203a")
         self.frame.pack(side="top", fill="x")
 
-        tk.Label(self.frame, text="Reliable Messenger", bg="#08203a", fg="#e6f0ff", font=("Segoe UI", 12, "bold")).pack(
+        tk.Label(self.frame, text="MUDT Messenger", bg="#08203a", fg="#e6f0ff", font=("Segoe UI", 12, "bold")).pack(
             side="left", padx=10, pady=10
         )
 
@@ -30,7 +30,6 @@ class HeaderBar:
         self.lbl_loss = tk.Label(stats, text=f"Loss: {messenger.loss_min:.0%}-{messenger.loss_max:.0%}", bg="#08203a", fg="#c9dcff", font=("Segoe UI", 9))
         self.lbl_loss.pack(side="left", padx=6)
 
-        ttk.Button(self.frame, text="Help", command=on_help).pack(side="right", padx=8)
         ttk.Button(self.frame, text="Log", command=on_toggle_log).pack(side="right", padx=8)
         ttk.Button(self.frame, text="Verify", command=on_verify).pack(side="right")
 
@@ -53,4 +52,3 @@ class HeaderBar:
             self.lbl_loss.configure(text=f"Loss: {messenger.loss_min:.0%}-{messenger.loss_max:.0%}")
         except Exception:
             pass
-
