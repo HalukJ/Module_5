@@ -107,7 +107,6 @@ class ChartsWindow(tk.Toplevel):
         ax.set_ylim(0, 100)
         ax.set_ylabel("Delivery Rate %")
         ax.set_xlabel("Message ID")
-        ax.set_title(f"Per-Message Delivery Rate (overall loss ~ {loss_rate:.1f}%)")
         ax.grid(True, axis="y", alpha=0.3)
         fig.tight_layout()
 
