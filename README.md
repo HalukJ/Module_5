@@ -50,7 +50,7 @@ A desktop GUI that simulates reliable data delivery over a lossy channel. It off
 - `Module 5/Sending.py` – Single, Double, Stop‑and‑Wait ARQ implementations
 - `Module 5/Network.py` – Bernoulli loss channel
 - `Module 5/Server.py` – Chunk tracking and verification
-- `Module 5/CSV.py` – Session CSV lifecycle and header
+- `Module 5/CSV.py` – Session CSV lifecycle
 
 ## Notes
 - CSV is cleaned up on exit/signals; you can also clear it from the sidebar.
